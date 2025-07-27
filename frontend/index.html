@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Dummy Bank Chat</title>
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Helvetica, Arial;
+      background: #fff;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ─── Top Bars ─────────────────────────────────────────────────── */
+    .header-top {
+      background: #000; color: #fff; font-size: .9rem;
+    }
+    .header-top .container {
+      display:flex; justify-content:space-between; padding:5px 20px;
+    }
+    .header-top ul{ display:flex; list-style:none; }
+    .header-top li{ margin-right:20px; cursor:pointer; }
+    .header-top li.active{ text-decoration:underline; }
+
+    .header-sub {
+      background:#fff; border-bottom:1px solid #e5e5ea;
+    }
+    .header-sub .container {
+      display:flex; align-items:center; padding:10px 20px;
+    }
+    .header-sub .logo img{ height:32px; }
+    .header-sub nav {
+      display:flex; gap:40px; margin-left:40px;
+    }
+    .header-sub .nav-item { cursor:pointer; }
+    .header-sub .nav-item span {
+      display:block; font-size:.8rem; color:#666;
+    }
+    .hero-image {
+  flex: 1;               /* take up right half */
+  height: 100%;          /* match hero height */
+  background-image: url("p.jpeg");
+  background-size: cover;      /* scale to fill */
+  background-position: center; /* center it */
+  background-repeat: no-repeat;
+}
+
+
+    /* ─── HERO: TEXT LEFT, IMAGE RIGHT ───────────────────────────────── */
+    .hero {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      height: calc(100vh - 96px); /* space for two headers */
+    }
+    .hero-text {
+      flex:1;
+      padding: 40px 60px;
+      max-width:45%;
+    }
+    .hero-text h1 {
+      font-size:2.5rem;
+      margin-bottom:16px;
+      color:#000;
+    }
+    .hero-text p {
+      font-size:1rem;
+      margin-bottom:24px;
+      color:#333;
+    }
+    .apply-btn {
+      background:#d40000;
+      color:#fff;
+      border:none;
+      padding:12px 24px;
+      font-size:1rem;
+      border-radius:4px;
+      cursor:pointer;
+    }
+    .tc {
+      margin-top:8px;
+      font-size:.8rem;
+      color:#666;
+    }
+    .hero-image {
+      flex:1;
+      height:100%;
+      /* background-layer: display the card as a background cover */
+      background-image: url("p.jpeg");
+      background-repeat: no-repeat;
+      background-size: cover;
+      background-position: center center;
+    }
+
+    /* ─── CHAT WIDGET (BLACK THEME) ───────────────────────────────── */
+    #chat-toggle {
+      position:fixed; bottom:20px; right:20px;
+      width:60px; height:60px;
+      border:none; border-radius:50%;
+      background:#000; color:#fff;
+      font-size:1rem; cursor:pointer;
+      box-shadow:0 2px 6px rgba(0,0,0,0.2);
+    }
+    #chat-window {
+      display:none;
+      position:fixed; bottom:100px; right:20px;
+      width:320px; height:480px;
+      background:#fff; border-radius:12px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.2);
+      overflow:hidden; display:flex; flex-direction:column;
+      font-size:.9rem;
+    }
+    #greeting {
+      position:absolute; top:-60px; right:0;
+      background:#fff; padding:10px 14px;
+      border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.2);
+      width:200px; font-weight:bold;
+    }
+    #greeting::after {
+      content:""; position:absolute; bottom:-8px; right:20px;
+      border:8px solid transparent; border-top-color:#fff;
+    }
+    .chat-header {
+      height:50px; background:#000; color:#fff;
+      display:flex; align-items:center; padding:0 12px;
+      font-weight:bold; flex-shrink:0;
+    }
+    .chat-messages {
+      flex:1; padding:12px; overflow-y:auto;
+      display:flex; flex-direction:column; gap:8px; list-style:none;
+    }
+    .chat-messages li{ max-width:75%; }
+    .message {
+      padding:8px 12px; border-radius:16px;
+      white-space:pre-wrap; line-height:1.4; display:inline-block;
+    }
+    .message.bot {
+      background:#e5e5ea; color:#000;
+      align-self:flex-start; border-bottom-left-radius:4px;
+    }
+    .message.user {
+      background:#000; color:#fff;
+      align-self:flex-end; border-bottom-right-radius:4px;
+    }
+    .chat-input {
+      flex-shrink:0; padding:8px; background:#f1f1f1;
+      display:flex; gap:8px;
+    }
+    .chat-input textarea {
+      flex:1; resize:none; border:none;
+      border-radius:4px; padding:8px; font-size:.9rem;
+    }
+    .chat-input button {
+      border:none; background:#000; color:#fff;
+      padding:8px 12px; border-radius:4px; cursor:pointer;
+    }
+  </style>
+</head>
+<body>
+  <!-- Top black bar -->
+  <div class="header-top">
+    <div class="container">
+      <ul>
+        <li class="active">Personal</li>
+        <li>Business</li>
+        <li>Asset Management</li>
+        <li>Private Banking</li>
+        <li>Securities & Capital Markets</li>
+        <li>GIFT City</li>
+      </ul>
+      <ul>
+        <li>English</li>
+        <li>🔍</li>
+        <li>Register</li>
+        <li style="font-weight:bold;">Log On</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Secondary white nav -->
+  <div class="header-sub">
+    <div class="container">
+      <div class="logo">
+        <img src="h.svg" alt="HSBC"/>
+      </div>
+      <nav>
+        <div class="nav-item">Banking<span>Cards & Accounts</span></div>
+        <div class="nav-item">Borrowing<span>Home & Personal Loans</span></div>
+        <div class="nav-item">Investing<span>Wealth & Insurance</span></div>
+        <div class="nav-item">NRI<span>services & Transfers</span></div>
+        <div class="nav-item">Offers<span>Offers & Rewards</span></div>
+        <div class="nav-item">Online Banking<span>Banking made easy</span></div>
+      </nav>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-text">
+      <h1>Earn more with our RuPay Credit Card</h1>
+      <p>Get up to 10% cashback, 0% forex mark‑up fees, 10 complimentary airport lounge visits and much more.</p>
+      <button class="apply-btn">Apply now</button>
+      <div class="tc">T&Cs apply.</div>
+    </div>
+   <div class="hero">
+  <div class="hero-text">
+  </div>
+  <div class="hero-image">
+    <!-- no <img> here—CSS handles the background -->
+  </div>
+</div>
+
+  </div>
+
+  <!-- Chat toggle & window -->
+  <button id="chat-toggle">Chat</button>
+  <div id="chat-window">
+    <div id="greeting">Hi, need help? We're here if you need us.</div>
+    <div class="chat-header">MyBank AI</div>
+    <ul id="chatMessages" class="chat-messages"></ul>
+    <div class="chat-input">
+      <textarea id="messageInput" rows="1" placeholder="Type your message..."></textarea>
+      <button id="sendBtn">Send</button>
+    </div>
+  </div>
+
+  <script>
+    const chatToggle   = document.getElementById('chat-toggle');
+    const chatWindow   = document.getElementById('chat-window');
+    const sendBtn      = document.getElementById('sendBtn');
+    const messageInput = document.getElementById('messageInput');
+    const chatMessages = document.getElementById('chatMessages');
+    const greeting     = document.getElementById('greeting');
+
+    chatToggle.addEventListener('click', () => {
+      chatWindow.style.display = chatWindow.style.display === 'flex' ? 'none' : 'flex';
+      if (chatWindow.style.display === 'flex') {
+        setTimeout(() => greeting.style.display = 'none', 3000);
+      } else {
+        greeting.style.display = 'block';
+      }
+    });
+
+    function appendMessage(text, sender) {
+      const li = document.createElement('li');
+      li.classList.add('message', sender);
+      li.textContent = text;
+      chatMessages.appendChild(li);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = messageInput.value.trim();
+      if (!text) return;
+      appendMessage(text, 'user');
+      messageInput.value = '';
+      try {
+        const res = await fetch('/api/chat', {
+          method:'POST',
+          headers:{ 'Content-Type':'application/json' },
+          body: JSON.stringify({ user_id:'user1', message:text })
+        });
+        const { reply } = await res.json();
+        appendMessage(reply, 'bot');
+      } catch (err) {
+        console.error(err);
+        appendMessage('Sorry, something went wrong.', 'bot');
+      }
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    messageInput.addEventListener('keypress', e => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+  </script>
+</body>
+</html>
